@@ -2,9 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { Reveal } from "../ui/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
-import { blogPosts } from "@/data";
+import { useBlogPosts } from "@/data";
 
 export function BlogPreview() {
+  const { data: blogPosts = [] } = useBlogPosts();
   const featured = blogPosts.slice(0, 3);
   return (
     <section id="blog" className="relative py-24 md:py-32">
