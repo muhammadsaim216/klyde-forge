@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Clock, Search } from "lucide-react";
-import { blogPosts } from "@/data";
+import { useBlogPosts } from "@/data";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/blog")({
 function BlogPage() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
+  const { data: blogPosts = [] } = useBlogPosts();
 
   const list = useMemo(
     () =>
@@ -32,7 +33,7 @@ function BlogPage() {
           (cat === "All" || p.category === cat) &&
           (q === "" || p.title.toLowerCase().includes(q.toLowerCase())),
       ),
-    [q, cat],
+    [q, cat, blogPosts],
   );
 
   return (
