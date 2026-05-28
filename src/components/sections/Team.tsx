@@ -1,10 +1,12 @@
 import { Github, Linkedin, Twitter } from "lucide-react";
 import { Reveal } from "../ui/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
-import { team } from "@/data";
+import { useTeam } from "@/data";
 import { motion } from "framer-motion";
 
 export function Team() {
+  const { data: team = [] } = useTeam();
+
   return (
     <section id="team" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-5">
@@ -16,7 +18,7 @@ export function Team() {
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {team.map((m, i) => (
-            <Reveal key={m.name} delay={(i % 3) * 0.08}>
+            <Reveal key={m.id} delay={(i % 3) * 0.08}>
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
@@ -30,7 +32,7 @@ export function Team() {
                 <h3 className="mt-5 text-base font-semibold">{m.name}</h3>
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">{m.role}</p>
                 <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-                  {m.skills.map((s) => (
+                  {m.skills.map((s: string) => (
                     <span key={s} className="rounded-full bg-white/5 px-2.5 py-0.5 text-[11px] text-muted-foreground">{s}</span>
                   ))}
                 </div>
