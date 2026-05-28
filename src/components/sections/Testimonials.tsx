@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { testimonials } from "@/data";
+import { useTestimonials } from "@/data";
 import { SectionHeading } from "../ui/SectionHeading";
 
 export function Testimonials() {
+  const { data: testimonials = [] } = useTestimonials();
   const [i, setI] = useState(0);
   const t = testimonials[i];
 
   useEffect(() => {
+    if (testimonials.length === 0) return;
     const id = setInterval(() => setI((p) => (p + 1) % testimonials.length), 6000);
     return () => clearInterval(id);
-  }, []);
+  }, [testimonials.length]);
+
+  if (!t) return null;
 
   return (
     <section id="testimonials" className="relative py-24 md:py-32">

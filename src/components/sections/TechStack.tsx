@@ -1,7 +1,8 @@
 import { SectionHeading } from "../ui/SectionHeading";
-import { techStack } from "@/data";
+import { useTechStack } from "@/data";
 
 export function TechStack() {
+  const { data: techStack = [] } = useTechStack();
   const items = [...techStack, ...techStack];
   return (
     <section className="relative py-24 md:py-32">
