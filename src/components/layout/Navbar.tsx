@@ -1,9 +1,11 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard, LogOut, LogIn } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { GradientButton } from "../ui/GradientButton";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { label: "Home", to: "/", hash: "" },
@@ -18,6 +20,12 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  async function signOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -62,6 +70,20 @@ export function Navbar() {
 
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
+          {isAdmin && (
+            <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-full glass px-4 py-2 text-sm">
+              <LayoutDashboard className="size-4" /> Admin
+            </Link>
+          )}
+          {user ? (
+            <button onClick={signOut} className="inline-flex items-center gap-1.5 rounded-full glass px-4 py-2 text-sm">
+              <LogOut className="size-4" /> Sign out
+            </button>
+          ) : (
+            <Link to="/login" className="inline-flex items-center gap-1.5 rounded-full glass px-4 py-2 text-sm">
+              <LogIn className="size-4" /> Sign in
+            </Link>
+          )}
           <Link to="/contact">
             <GradientButton>Start a project</GradientButton>
           </Link>
