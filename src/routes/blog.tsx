@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Clock, Search } from "lucide-react";
 import { useBlogPosts } from "@/data";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+
 
 const categories = ["All", "AI", "Web Development", "SaaS", "UI/UX", "Startup Engineering", "Cloud Systems"];
 
@@ -39,11 +39,12 @@ function BlogPage() {
   return (
     <div className="pt-32 pb-20">
       <div className="mx-auto max-w-7xl px-5">
-        <SectionHeading
-          eyebrow="The Klyde Journal"
-          title="Notes from the workshop."
-          description="Deep dives, opinions and field notes from the team."
-        />
+        <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-gradient">
+          The Klyde engineering blog.
+        </h1>
+        <p className="mt-4 max-w-2xl text-muted-foreground">
+          Deep dives, opinions and field notes on AI, product engineering and modern software craft.
+        </p>
 
         <Reveal>
           <div className="mt-12 flex flex-col items-stretch gap-4 md:flex-row md:items-center">
