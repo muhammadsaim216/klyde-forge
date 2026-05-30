@@ -22,8 +22,8 @@ export function Testimonials() {
       <div className="mx-auto max-w-5xl px-5">
         <SectionHeading
           eyebrow="Testimonials"
-          title="What our clients say."
-          description="Long-term partners across SaaS, fintech, AI and consumer."
+          title="In their words, not ours."
+          description="A few notes from the founders and teams we've shipped alongside."
         />
 
         <div className="relative mt-16">
