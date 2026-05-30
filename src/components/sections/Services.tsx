@@ -12,8 +12,8 @@ export function Services() {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="Services"
-          title="Everything you need to ship category-defining products."
-          description="One team, one standard of craft — across product, design, engineering and AI."
+          title="What we actually do."
+          description="Product, design, engineering, AI — under one roof so nothing gets lost in a handoff."
         />
 
         <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
