@@ -9,8 +9,8 @@ export function TechStack() {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="Our Stack"
-          title="Built on the tools we love."
-          description="A modern, opinionated stack that lets us ship faster without trade-offs."
+          title="The tools we reach for."
+          description="Boring where it should be, sharp where it matters. We pick tools we've shipped with — not whatever's trending this week."
         />
         <div className="relative mt-14 overflow-hidden">
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-background to-transparent" />
