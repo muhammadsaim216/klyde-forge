@@ -43,9 +43,9 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.1 }}
           className="mx-auto mt-6 max-w-5xl text-center text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl lg:text-8xl"
         >
-          We Build Digital <br className="hidden md:block" />
-          Experiences That{" "}
-          <span className="text-gradient animate-gradient">Matter.</span>
+          Software that earns its <br className="hidden md:block" />
+          place on your{" "}
+          <span className="text-gradient animate-gradient">roadmap.</span>
         </motion.h1>
 
         <motion.p
