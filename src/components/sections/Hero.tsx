@@ -54,8 +54,8 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.25 }}
           className="mx-auto mt-7 max-w-2xl text-center text-base text-muted-foreground md:text-lg"
         >
-          Klyde is a modern software house crafting websites, SaaS platforms, AI systems,
-          mobile apps and automation tools for ambitious teams worldwide.
+          We're Klyde — a small team that builds web apps, SaaS tools, AI features
+          and the occasional mobile app for founders who care how the thing actually feels.
         </motion.p>
 
         <motion.div
