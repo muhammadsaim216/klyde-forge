@@ -28,8 +28,8 @@ export function Contact() {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="Let's talk"
-          title="Tell us about your project."
-          description="We reply within one business day. No sales theatre — just a real conversation about whether we're a fit."
+          title="Got something you want to build?"
+          description="Drop us a note. A real person reads every message and usually replies the same day — no discovery-call gauntlet, just a straight conversation."
         />
 
         <div className="mt-16 grid gap-8 lg:grid-cols-5">

@@ -23,8 +23,8 @@ export function Projects({ compact = false }: { compact?: boolean }) {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="Selected Work"
-          title="Projects that move the needle."
-          description="A curated slice of recent work across web, mobile, AI and commerce."
+          title="A few things we're proud of."
+          description="Recent builds across web, mobile, AI and commerce — picked because the story behind them is worth telling."
         />
 
         <Reveal>

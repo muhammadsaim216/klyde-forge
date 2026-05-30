@@ -12,8 +12,8 @@ export function Team() {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="The Team"
-          title="Senior makers. Zero ego."
-          description="A small, deliberately senior team that ships every week."
+          title="The people you'll actually work with."
+          description="No account managers, no junior bait-and-switch. The folks below are the ones writing the code and pushing the pixels."
         />
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

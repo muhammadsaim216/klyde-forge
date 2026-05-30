@@ -12,8 +12,8 @@ export function BlogPreview() {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="From the Blog"
-          title="Notes from the workshop."
-          description="Field notes on AI, product engineering and modern software craft."
+          title="What we've been writing."
+          description="Half lessons learned, half things we wish someone had told us. Mostly about AI, product, and shipping software that holds up."
         />
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {featured.map((p, i) => (

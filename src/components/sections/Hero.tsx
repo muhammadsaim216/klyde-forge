@@ -43,9 +43,9 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.1 }}
           className="mx-auto mt-6 max-w-5xl text-center text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl lg:text-8xl"
         >
-          We Build Digital <br className="hidden md:block" />
-          Experiences That{" "}
-          <span className="text-gradient animate-gradient">Matter.</span>
+          Software that earns its <br className="hidden md:block" />
+          place on your{" "}
+          <span className="text-gradient animate-gradient">roadmap.</span>
         </motion.h1>
 
         <motion.p
@@ -54,8 +54,8 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.25 }}
           className="mx-auto mt-7 max-w-2xl text-center text-base text-muted-foreground md:text-lg"
         >
-          Klyde is a modern software house crafting websites, SaaS platforms, AI systems,
-          mobile apps and automation tools for ambitious teams worldwide.
+          We're Klyde — a small team that builds web apps, SaaS tools, AI features
+          and the occasional mobile app for founders who care how the thing actually feels.
         </motion.p>
 
         <motion.div
