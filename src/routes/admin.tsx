@@ -7,7 +7,16 @@ import { toast } from "sonner";
 import { Loader2, Plus, Trash2, Pencil, LogOut, Save, X } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin — Klyde" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [
+      { title: "Admin — Klyde" },
+      { name: "description", content: "Internal Klyde admin dashboard for managing projects, blog posts, team, services and incoming messages." },
+      { property: "og:title", content: "Admin — Klyde" },
+      { property: "og:description", content: "Internal Klyde admin dashboard for managing site content and messages." },
+      { property: "og:url", content: "/admin" },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
   component: AdminPage,
 });
 
