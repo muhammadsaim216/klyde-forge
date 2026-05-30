@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Clock, Search } from "lucide-react";
 import { useBlogPosts } from "@/data";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+
 
 const categories = ["All", "AI", "Web Development", "SaaS", "UI/UX", "Startup Engineering", "Cloud Systems"];
 
