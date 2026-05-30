@@ -5,7 +5,15 @@ import { GradientButton } from "@/components/ui/GradientButton";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Sign up — Klyde" }] }),
+  head: () => ({
+    meta: [
+      { title: "Sign up — Klyde" },
+      { name: "description", content: "Create a Klyde account to access the admin dashboard, publish projects, and manage the studio's site content in one place." },
+      { property: "og:title", content: "Sign up — Klyde" },
+      { property: "og:description", content: "Create a Klyde account to access the admin dashboard, publish projects, and manage the studio's site content in one place." },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
   component: SignupPage,
 });
 
