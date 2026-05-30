@@ -11,8 +11,8 @@ export function About() {
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="About Klyde"
-          title="Innovation, scaled with obsession."
-          description="We pair Silicon-Valley engineering with brand-agency design to ship products that feel inevitable — scalable systems, considered UX, and AI woven in where it counts."
+          title="Small team. Strong opinions. Real shipping."
+          description="We're engineers who like design and designers who can read a stack trace. The result is software that ships on time and doesn't feel like a committee built it."
         />
 
         <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
