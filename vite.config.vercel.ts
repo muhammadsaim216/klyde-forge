@@ -1,11 +1,11 @@
 // Vercel-only Vite config for TanStack Start.
-// Used when deploying outside Lovable (no Cloudflare plugin, no Lovable wrapper).
+// Activate on Vercel either by:
+//   1. Renaming this file to `vite.config.ts` in the GitHub repo, OR
+//   2. Setting Vercel's "Build Command" to: vite build --config vite.config.vercel.ts
 //
-// To activate on Vercel:
-//   1. Rename this file to `vite.config.ts` (overwrite the Lovable one), OR
-//   2. Set Vercel's "Build Command" to: vite build --config vite.config.vercel.ts
-//
-// See VERCEL_DEPLOY.md for the full step-by-step.
+// IMPORTANT: do NOT override `server.entry` here — TanStack Start's `target: "vercel"`
+// auto-generates the correct Vercel serverless handler (api/server.js + .vercel/output).
+// Our src/server.ts is a Cloudflare Worker wrapper and will 404 on Vercel.
 import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
@@ -26,7 +26,6 @@ export default defineConfig({
     tanstackStart({
       target: "vercel",
       customViteReactPlugin: true,
-      server: { entry: "server" },
     }),
     viteReact(),
   ],

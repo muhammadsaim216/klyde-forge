@@ -1,37 +1,38 @@
 # Deploying to Vercel
 
-This project runs on TanStack Start. Inside Lovable the preview uses the Lovable Vite wrapper (which includes Cloudflare). For Vercel, use the dedicated `vite.config.vercel.ts` shipped in this repo — it targets Vercel directly with no Cloudflare involved.
+This project runs on TanStack Start. The default `vite.config.ts` targets
+Cloudflare (so the Lovable preview works). For Vercel, use `vite.config.vercel.ts`.
 
-## Steps
+## One-time setup on Vercel
 
-1. **Export to GitHub** from Lovable (top right → GitHub → Connect / Push).
-2. In the GitHub repo, **swap the Vite config** for the Vercel one. Pick one:
-   - **Option A (simplest):** rename `vite.config.vercel.ts` → `vite.config.ts` (overwrite the existing file).
-   - **Option B:** keep both files and set Vercel's **Build Command** to:
-     ```
-     vite build --config vite.config.vercel.ts
-     ```
-3. **Remove Cloudflare deps** (optional cleanup):
-   ```
-   npm remove @cloudflare/vite-plugin @lovable.dev/vite-tanstack-config
-   ```
-   Also delete `wrangler.jsonc`.
-4. **Import the repo in Vercel** → New Project → select repo.
-   - Framework Preset: **Other** (or Vite). Don't pick Next.js.
-   - Build Command: `vite build` (or the Option B command above).
-   - Output Directory: leave blank — the TanStack Vercel target writes to `.vercel/output` automatically.
-5. **Add environment variables** in Vercel → Project Settings → Environment Variables:
+1. **Export to GitHub** from Lovable (top-right → GitHub).
+2. **Import the repo in Vercel** → New Project → pick this repo.
+3. In **Project Settings → Build & Development Settings**:
+   - **Framework Preset:** `Other` (do NOT pick Vite — it will deploy as a static site and you'll get 404s).
+   - **Build Command:** `vite build --config vite.config.vercel.ts`
+   - **Output Directory:** leave EMPTY (TanStack Start writes to `.vercel/output` automatically — Vercel auto-detects it).
+   - **Install Command:** leave default (`npm install` / `bun install`).
+4. Add **Environment Variables** (Settings → Environment Variables):
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_PUBLISHABLE_KEY`
    - `VITE_SUPABASE_PROJECT_ID`
-   - `SUPABASE_URL`
-   - `SUPABASE_PUBLISHABLE_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-   - `LOVABLE_API_KEY` (if you use the AI gateway)
-6. **Deploy**. Vercel will build using the TanStack Start Vercel adapter, which produces serverless functions for SSR + server functions.
+   - `LOVABLE_API_KEY` (server-side, for AI features)
+5. **Deploy.**
 
-## Notes
+## Why you got `404: NOT_FOUND`
 
-- The `target: "vercel"` option in `vite.config.vercel.ts` is what tells TanStack Start to emit Vercel-compatible serverless output instead of a Worker.
-- Server functions (`createServerFn`) and server routes (`src/routes/api/*`) work identically on Vercel — no code changes needed.
-- If you keep editing in Lovable after exporting, only `vite.config.ts` (the Lovable one) is used inside Lovable's preview; `vite.config.vercel.ts` is ignored here and only activates on Vercel.
+That error means Vercel served your site as static files with no serverless
+handler attached. It happens when:
+- The framework preset was set to **Vite** (static-only), OR
+- The build command used the default `vite.config.ts` (Cloudflare target — produces a Worker, not Vercel functions), OR
+- The output directory was forced to `dist/` (skips the `.vercel/output` directory that TanStack Start generates).
+
+The fixes above (Framework = Other, Build Command pointing at `vite.config.vercel.ts`, empty Output Directory) address all three.
+
+## Optional cleanup
+
+Once deployed and working, you can remove Cloudflare-only files from the **GitHub repo** (not from Lovable — they're needed for the preview):
+- `wrangler.jsonc`
+- devDependencies: `@cloudflare/vite-plugin`, `@lovable.dev/vite-tanstack-config`
+
+If you remove them, also rename `vite.config.vercel.ts` → `vite.config.ts` (overwriting the original) and drop the custom Build Command.
