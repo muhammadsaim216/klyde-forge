@@ -381,14 +381,14 @@ function RowEditor({
                     rows={f.type === "json" ? 5 : 3}
                     value={value}
                     onChange={(e) => setField(f.key, e.target.value)}
-                    className="w-full rounded-xl glass px-3 py-2 text-sm font-mono outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full rounded-xl glass bg-background/40 text-foreground px-3 py-2 text-sm font-mono outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 ) : (
                   <input
                     type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
                     value={value}
                     onChange={(e) => setField(f.key, e.target.value)}
-                    className="w-full rounded-xl glass px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full rounded-xl glass bg-background/40 text-foreground px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 )}
               </div>
