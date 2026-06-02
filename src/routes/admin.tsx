@@ -356,11 +356,11 @@ function RowEditor({
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm overflow-y-auto"
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-4 bg-background/80 backdrop-blur-sm overflow-y-auto"
          onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()}
-           className="relative w-full max-w-2xl my-8 rounded-3xl glass-strong p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-4 right-4 rounded-full glass p-2"><X className="size-4" /></button>
+           className="relative w-full max-w-2xl my-8 rounded-3xl glass-strong bg-card p-6 sm:p-8 sm:max-h-[85vh] sm:overflow-y-auto">
+        <button onClick={onClose} className="sticky top-0 float-right -mr-2 -mt-2 rounded-full glass p-2 z-10"><X className="size-4" /></button>
         <h3 className="text-xl font-display font-semibold mb-5">
           {creating ? "New entry" : "Edit entry"}
         </h3>
