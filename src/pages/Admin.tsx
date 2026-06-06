@@ -1,24 +1,11 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { toast } from "sonner";
 import { Loader2, Plus, Trash2, Pencil, LogOut, Save, X } from "lucide-react";
-
-export const Route = createFileRoute("/admin")({
-  head: () => ({
-    meta: [
-      { title: "Admin — Klyde" },
-      { name: "description", content: "Internal Klyde admin dashboard for managing projects, blog posts, team, services and incoming messages." },
-      { property: "og:title", content: "Admin — Klyde" },
-      { property: "og:description", content: "Internal Klyde admin dashboard for managing site content and messages." },
-      { property: "og:url", content: "/admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
-  }),
-  component: AdminPage,
-});
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 type FieldType = "text" | "textarea" | "number" | "url" | "array" | "json" | "date";
 type FieldDef = { key: string; label: string; type: FieldType; required?: boolean };
@@ -127,13 +114,14 @@ const TABLES: TableDef[] = [
   },
 ];
 
-function AdminPage() {
+export default function AdminPage() {
+  useDocumentTitle("Admin — Klyde");
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const [active, setActive] = useState<string>(TABLES[0].key);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/login" });
+    if (!loading && !user) navigate("/login");
   }, [loading, user, navigate]);
 
   const activeDef = useMemo(() => TABLES.find((t) => t.key === active)!, [active]);
@@ -155,7 +143,7 @@ function AdminPage() {
             Signed in as {user.email}. You need the admin role to access this page.
           </p>
           <button
-            onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/login" }); }}
+            onClick={async () => { await supabase.auth.signOut(); navigate("/login"); }}
             className="mt-6 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm"
           >
             <LogOut className="size-4" /> Sign out
@@ -175,7 +163,7 @@ function AdminPage() {
         <div className="flex gap-2">
           <Link to="/" className="rounded-full glass px-4 py-2 text-sm">View site</Link>
           <button
-            onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/login" }); }}
+            onClick={async () => { await supabase.auth.signOut(); navigate("/login"); }}
             className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm"
           >
             <LogOut className="size-4" /> Sign out

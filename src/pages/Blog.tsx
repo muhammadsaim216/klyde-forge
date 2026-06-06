@@ -1,27 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Clock, Search } from "lucide-react";
 import { useBlogPosts } from "@/data";
 import { Reveal } from "@/components/ui/Reveal";
-
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 const categories = ["All", "AI", "Web Development", "SaaS", "UI/UX", "Startup Engineering", "Cloud Systems"];
 
-export const Route = createFileRoute("/blog")({
-  head: () => ({
-    meta: [
-      { title: "Blog — Klyde" },
-      { name: "description", content: "Field notes on AI, product engineering and modern software craft." },
-      { property: "og:title", content: "Blog — Klyde" },
-      { property: "og:description", content: "Field notes on AI, product engineering and software craft." },
-      { property: "og:url", content: "/blog" },
-    ],
-    links: [{ rel: "canonical", href: "/blog" }],
-  }),
-  component: BlogPage,
-});
-
-function BlogPage() {
+export default function BlogPage() {
+  useDocumentTitle(
+    "Blog — Klyde",
+    "Field notes on AI, product engineering and modern software craft.",
+  );
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
   const { data: blogPosts = [] } = useBlogPosts();
