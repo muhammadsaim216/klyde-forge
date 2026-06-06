@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, LayoutDashboard, LogOut, LogIn } from "lucide-react";
@@ -8,13 +8,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const links = [
-  { label: "Home", to: "/", hash: "" },
-  { label: "Services", to: "/", hash: "services" },
-  { label: "Projects", to: "/projects", hash: "" },
-  { label: "Team", to: "/", hash: "team" },
-  { label: "Blogs", to: "/blog", hash: "" },
-  { label: "Testimonials", to: "/", hash: "testimonials" },
-  { label: "Contact", to: "/contact", hash: "" },
+  { label: "Home", to: "/" },
+  { label: "Services", to: "/#services" },
+  { label: "Projects", to: "/projects" },
+  { label: "Team", to: "/#team" },
+  { label: "Blogs", to: "/blog" },
+  { label: "Testimonials", to: "/#testimonials" },
+  { label: "Contact", to: "/contact" },
 ];
 
 export function Navbar() {
@@ -24,7 +24,7 @@ export function Navbar() {
   const navigate = useNavigate();
   async function signOut() {
     await supabase.auth.signOut();
-    navigate({ to: "/" });
+    navigate("/");
   }
 
   useEffect(() => {
@@ -60,7 +60,6 @@ export function Navbar() {
             <Link
               key={l.label}
               to={l.to}
-              hash={l.hash || undefined}
               className="rounded-full px-4 py-1.5 text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
             >
               {l.label}
@@ -115,7 +114,6 @@ export function Navbar() {
                 <Link
                   key={l.label}
                   to={l.to}
-                  hash={l.hash || undefined}
                   onClick={() => setOpen(false)}
                   className="rounded-xl px-4 py-3 text-sm text-foreground/90 hover:bg-white/10"
                 >
