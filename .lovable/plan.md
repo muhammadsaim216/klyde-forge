@@ -1,110 +1,58 @@
+# Rewrite to React Router DOM SPA
 
-# Klyde — Premium Software House Portfolio
+Convert the project from TanStack Start (SSR framework) to a plain Vite + React + react-router-dom SPA. Lose SSR, server functions, per-route SEO. Gain familiarity and a dead-simple Vercel deploy.
 
-A dark, futuristic, multi-section marketing site with glassmorphism UI, neon cyan/violet accents, animated gradients, and smooth Framer Motion interactions. Built on the existing TanStack Start + Tailwind stack.
+## What gets deleted
 
-## Design system (src/styles.css)
+- `src/start.ts`, `src/server.ts`, `src/router.tsx`, `src/routes/__root.tsx`, `src/routeTree.gen.ts`
+- `src/routes/sitemap[.]xml.ts` (server route — replaced with a static `public/sitemap.xml`)
+- `src/integrations/supabase/auth-middleware.ts`, `auth-attacher.ts` (server-fn only)
+- `vite.config.vercel.ts`, `wrangler.jsonc`, `worker-configuration.d.ts`
+- Cloudflare/TanStack-specific packages: `@cloudflare/vite-plugin`, `@tanstack/react-start`, `@tanstack/router-plugin`, `@lovable.dev/vite-tanstack-config`
 
-- Dark theme as default (root = dark). Light mode toggle layered on top.
-- Palette (oklch tokens):
-  - background: near-black with subtle navy tint
-  - foreground: soft white
-  - primary: electric blue
-  - accent: violet
-  - neon-cyan + neon-violet glow tokens
-  - card: translucent white @ 4–8% for glassmorphism
-- Custom tokens: `--gradient-primary` (blue→violet), `--gradient-glow`, `--shadow-glow-cyan`, `--shadow-glow-violet`, `--border-gradient`.
-- Typography: Sora (display) + Inter (body) via Google Fonts in `__root.tsx` head links.
-- Utility classes: `.glass`, `.glass-strong`, `.glow-cyan`, `.glow-violet`, `.gradient-border`, `.text-gradient`, scroll-smooth on html.
-- Keyframes: float, grid-pan, gradient-shift, pulse-glow, marquee.
+## What gets created
 
-## Route architecture (TanStack Start)
+- `index.html` at repo root (SPA shell)
+- `src/main.tsx` (React mount + BrowserRouter)
+- `src/App.tsx` (`<Routes>` table)
+- `src/pages/` folder with: `Index.tsx`, `Admin.tsx`, `Blog.tsx`, `Contact.tsx`, `Login.tsx`, `Signup.tsx`, `Projects.tsx`, `NotFound.tsx`
+- New plain Vite `vite.config.ts` (React plugin + Tailwind + tsconfig-paths only)
+- `public/sitemap.xml` (static, hand-written for the known routes)
 
-Single-page marketing site with anchored sections is appropriate here (one continuous scroll experience). Add a few SEO-worthy standalone routes for the discoverable areas.
+## What gets rewritten
 
+- `src/routes/admin.tsx` — the `createServerFn` mutations become direct `supabase.from(...).insert/update/delete()` calls from the client. RLS already requires `admin` role, so security is preserved.
+- `src/components/layout/Navbar.tsx`, `Footer.tsx`, `Hero.tsx`, `BlogPreview.tsx` — swap `import { Link } from "@tanstack/react-router"` → `import { Link } from "react-router-dom"`, and `to="/foo"` stays the same (no `params={{}}` syntax used).
+- Any `useNavigate` / `useRouter` / `useParams` calls → react-router-dom equivalents.
+- All route `head()` SEO metadata → moved into either a single static `<title>`/`<meta>` in `index.html`, or per-page using a tiny `useDocumentTitle` hook (no react-helmet dependency).
+
+## Vercel deploy
+
+After the rewrite, `vercel.json` becomes:
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
 ```
-src/routes/
-  __root.tsx          // fonts, theme provider, global Navbar + Footer, meta
-  index.tsx           // Hero, About, Services, Projects, Featured, Team, Testimonials, Blog preview, Tech Stack, Contact
-  projects.tsx        // Full filterable project grid
-  blog.tsx            // Blog index with search/filter
-  contact.tsx         // Dedicated contact route (mirrors form)
-```
+Build command: `vite build`. Output: `dist/`. Framework preset in Vercel: **Vite**. That's it.
 
-Each route gets its own `head()` with unique title/description/og tags.
+## What you lose (explicit)
 
-## Component library (src/components/)
+- **SSR** — initial HTML is empty, content renders client-side. Slower first paint, weaker SEO without extra work.
+- **Per-route SEO metadata** — Google still indexes SPAs but social previews (OG tags) won't vary per route without SSR or pre-rendering.
+- **Server functions** — anything that needed a secret has to move to a Supabase Edge Function or a separate backend.
+- **`/api/*` server routes** — none currently in heavy use besides sitemap, which becomes static.
+- **The Lovable preview's TanStack-aware features** — the preview will still work as a plain SPA, but route-aware tooling tied to TanStack is gone.
 
-Reusable, themed components:
+## Execution order
 
-- `layout/Navbar.tsx` — sticky transparent glass nav, scroll-aware blur, mobile hamburger drawer (Framer Motion).
-- `layout/Footer.tsx` — links, socials, newsletter input, animated gradient line.
-- `layout/ThemeToggle.tsx` — dark/light toggle (localStorage + class on html).
-- `layout/MouseGlow.tsx` — cursor-follow radial glow (pointer-events-none).
-- `sections/Hero.tsx` — animated grid + particle canvas background, gradient headline, dual CTA, floating glass tech chips.
-- `sections/About.tsx` — mission copy + animated counter stats.
-- `sections/Services.tsx` — 8 service cards with animated Lucide icons, hover glow, gradient border.
-- `sections/Projects.tsx` — category filter chips, responsive masonry/grid of `ProjectCard`, opens `ProjectModal`.
-- `sections/FeaturedProject.tsx` — cinematic mockup with animated glow halo, parallax.
-- `sections/Team.tsx` — glass profile cards, hover tilt, socials.
-- `sections/Testimonials.tsx` — embla-style carousel with autoplay, ratings, avatars.
-- `sections/Blog.tsx` — featured + grid of articles, category filter, search input.
-- `sections/TechStack.tsx` — animated marquee of tech icons with hover scale.
-- `sections/Contact.tsx` — futuristic form (name, email, project type, budget, message), socials, Calendly CTA.
-- `ui/GlassCard.tsx`, `ui/GradientButton.tsx`, `ui/SectionHeading.tsx`, `ui/AnimatedCounter.tsx`, `ui/Reveal.tsx` (scroll-triggered fade/slide wrapper using `useInView`), `ui/ProjectModal.tsx`.
+1. Install `react-router-dom`, remove TanStack packages.
+2. Write new `vite.config.ts`, `index.html`, `src/main.tsx`, `src/App.tsx`.
+3. Create `src/pages/*` by converting each `src/routes/*` file (strip `createFileRoute`, strip `head()`, keep the component).
+4. Rewrite `Admin.tsx` server-fn calls → direct Supabase calls.
+5. Update the 4 components that import from `@tanstack/react-router`.
+6. Delete obsolete files.
+7. Update `vercel.json` + `package.json` scripts.
+8. Write `public/sitemap.xml`.
 
-## Data
-
-Static data files under `src/data/`:
-- `projects.ts` (8–10 sample projects with categories, tags, mock thumbnails, features, metrics)
-- `services.ts`, `team.ts`, `testimonials.ts`, `blog.ts`, `tech.ts`
-
-Thumbnails/mockups: generate 4–6 hero/project/team images with imagegen (dark futuristic UI mockups, abstract gradients, team avatars), stored in `src/assets/`.
-
-## Animations (Framer Motion)
-
-- Page-load: stagger fade-up on hero.
-- Scroll reveals via `Reveal` wrapper (`whileInView`, once: true).
-- Hero: animated SVG grid + small canvas particle field + floating chips (`animate` loop).
-- Cards: `whileHover` scale + glow shadow transition.
-- Featured project: parallax y-transform from `useScroll`.
-- Testimonials: AnimatePresence slide transitions.
-- Mouse-follow glow: spring-tracked div following pointer.
-- Counters: animate on inView using `motion` value + interval.
-
-## Dependencies to add
-
-- `framer-motion`
-- `embla-carousel-react` (testimonials)
-
-Lucide-react already available for icons.
-
-## Technical notes
-
-- Theme: default `<html class="dark">` in `__root.tsx` shellComponent; toggle flips class + persists.
-- Smooth scroll: `html { scroll-behavior: smooth }` + anchored `#services`, `#projects`, etc. on the index page; navbar links use TanStack `<Link>` with `hash` for in-page sections and `to` for separate routes.
-- SEO: per-route `head()` with title, description, og:* (no og:image until generated); JSON-LD Organization in `__root.tsx`.
-- Performance: lazy `ProjectModal`, image lazy loading, prefers-reduced-motion guards on heavy animations.
-- Accessibility: focus-visible rings on interactive elements, aria-labels on icon buttons, semantic landmarks.
-
-## Build order
-
-1. Install deps, set up design tokens + fonts + global glass utilities.
-2. Build shared primitives (GlassCard, GradientButton, Reveal, SectionHeading, MouseGlow, ThemeToggle).
-3. Navbar + Footer + root layout wiring.
-4. Hero + About + Services on index.
-5. Projects section + ProjectModal + filters; mirror on `/projects`.
-6. Featured Project + Team + Testimonials.
-7. Blog section + `/blog` route.
-8. Tech Stack + Contact + `/contact` route.
-9. Generate hero/project/team images, wire in.
-10. Polish pass: scroll reveals everywhere, hover micro-interactions, responsive QA at mobile/tablet/desktop.
-
-## Out of scope (can add later if you want)
-
-- Real backend for contact form submissions (Lovable Cloud).
-- Real blog CMS / MDX articles.
-- Real Calendly account wiring (placeholder link for now).
-- Auth / dashboard.
-
-Let me know if you'd like any section trimmed, expanded, or restyled before I start building.
+Total: ~25–30 file changes. This will take one large turn.
